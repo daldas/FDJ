@@ -1,0 +1,5 @@
+[{% for league in leagues -%}
+    {{ {value: league.strLeague, label: league.strLeague}|json_encode|raw }}
+    {%- if not loop.last %},{% endif -%}
+    {%- endfor %}]
+
