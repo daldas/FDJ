@@ -13,7 +13,26 @@ use Unirest;
 class FdjController extends Controller
 {
 
+    /**
+     * return Api Response
+     */
+    public function getApiData($url, $query=array()){
 
+        // Disables SSL cert validation temporary
+        Unirest\Request::verifyPeer(false);
+        // search teams
+        $headers = array('Accept' => 'application/json');
+        $response = Unirest\Request::get($url,$headers,$query);
+
+        $responses = get_object_vars($response->body);
+
+        $datas=array();
+
+            $datas = json_decode(json_encode($responses), True);
+
+                return $datas;
+
+    }
     /**
      * @Route("/", name="homepage")
      */
@@ -41,23 +60,15 @@ class FdjController extends Controller
 
         $q = $request->query->get('term'); // use "term" instead of "q" for jquery-ui
 
-        // Disables SSL cert validation temporary
-        Unirest\Request::verifyPeer(false);
-        // search teams
-        $headers = array('Accept' => 'application/json');
-        $query = array();
-        $response = Unirest\Request::get('https://www.thesportsdb.com/api/v1/json/1/all_leagues.php',$headers,$query);
-
-         $leagues = get_object_vars($response->body);
+        $url ='https://www.thesportsdb.com/api/v1/json/1/all_leagues.php';
+        $response = $this->getApiData($url);
 
         $my_leagues=array();
-        foreach ($leagues as $league)
+        foreach ($response as $league)
         {
 
             foreach($league as $my_league)
             {
-
-                $my_league = json_decode(json_encode($my_league), True);
 
                 $League_name =   $my_league['strLeague'];
 
@@ -83,24 +94,17 @@ class FdjController extends Controller
 
         $q = $request->get('strLeague'); // use "term" instead of "q" for jquery-ui
 
-        // Disables SSL cert validation temporary
-        Unirest\Request::verifyPeer(false);
-        // search teams
-        $headers = array('Accept' => 'application/json');
         $query = array('l' => $q);
 
-        $response = Unirest\Request::get('https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php',$headers,$query);
-
-        $teams = get_object_vars($response->body);
+        $url = 'https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php';
+        $response = $this->getApiData($url,$query);
 
         $equipes=array();
-        foreach ($teams as $team)
+        foreach ($response as $team)
         {
 
             foreach($team as $equipe)
             {
-
-                $equipe = json_decode(json_encode($equipe), True);
 
                 $id_team =   $equipe['idTeam'];
                 $equipes[$id_team] = $equipe;
@@ -120,24 +124,17 @@ class FdjController extends Controller
 
         $q = $request->get('id'); // use "term" instead of "q" for jquery-ui
 
-        // Disables SSL cert validation temporary
-        Unirest\Request::verifyPeer(false);
-        // search teams
-        $headers = array('Accept' => 'application/json');
         $query = array('id' => $q);
 
-        $response = Unirest\Request::get('https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php',$headers,$query);
-
-        $players = get_object_vars($response->body);
+        $url = 'https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php';
+        $response = $this->getApiData($url,$query);
 
         $joueurs=array();
-        foreach ($players as $player)
+        foreach ($response as $player)
         {
 
             foreach($player as $joueur)
             {
-
-                $joueur = json_decode(json_encode($joueur), True);
 
                 $idplayer =   $joueur['idPlayer'];
                 $joueurs[$idplayer] = $joueur;
