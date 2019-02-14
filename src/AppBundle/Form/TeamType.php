@@ -17,7 +17,7 @@ class TeamType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('team', AutocompleteType::class, ['class' => 'Team::class']);
+            ->add('team', AutocompleteType::class);
     }
     
     /**

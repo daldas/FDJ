@@ -26,7 +26,7 @@ class FdjController extends Controller
             'action' => $this->generateUrl('homepage').'?term=',
             'method' => 'GET',
         ) )
-            ->add('team', null)
+            ->add('team', null,['label' => ' '])
             ->getForm();
 
         return $this->render('default/home.html.twig', ['form' => $form->createView() ]);
@@ -81,19 +81,19 @@ class FdjController extends Controller
     public function getTeamsAction(Request $request,$id = null)
     {
 
-        $q = $request->query->get('strLeague'); // use "term" instead of "q" for jquery-ui
+        $q = $request->get('strLeague'); // use "term" instead of "q" for jquery-ui
 
         // Disables SSL cert validation temporary
         Unirest\Request::verifyPeer(false);
         // search teams
         $headers = array('Accept' => 'application/json');
-        $query = array('l' => 'French Ligue 1');
+        $query = array('l' => $q);
 
         $response = Unirest\Request::get('https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php',$headers,$query);
 
         $teams = get_object_vars($response->body);
 
-        $equipe=array();
+        $equipes=array();
         foreach ($teams as $team)
         {
 
@@ -104,6 +104,7 @@ class FdjController extends Controller
 
                 $id_team =   $equipe['idTeam'];
                 $equipes[$id_team] = $equipe;
+
             }
         }
 

@@ -11,9 +11,8 @@ $(document).ready(function () {
 
     $("#ui-id-1").click(function(){
 
-        var id = $("#form_team").val();
 
-        $('.ui-helper-hidden-accessible').html('<a href="/teams/French Ligue 1">Show List of teams</a>');
+        var id = $("#fake_form_team").val();
 
 
         if(id.toString().length > 0){

@@ -5,15 +5,15 @@
 <div class="container">
     <div class="row">
 
-        <div class="col-md-3 col-md-offset-3">
+
             {% for team in teams %}
+        <div class="col-md-3">
             <a href="/players/{{ team.idTeam }}" >
                 <img src="{{ team.strTeamBadge }}" typeof="" width="75" height="75"/>
             </a>
+        </div>
             {% endfor %}
         </div>
-
-
     </div>
 
 {% endblock %}
